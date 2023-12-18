@@ -1,0 +1,41 @@
+background(153, 147, 147);
+textSize(25);
+text("Slots Casino Game", 95, 100);
+text("Luke Murphy & David Arias", 51, 140);
+
+var Button = function(config) {
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 100;
+    this.height = config.height || 50;
+    this.label = config.label || "Click";
+};
+Button.prototype.draw = function() {
+    fill(255, 255, 255);
+    rect(this.x, this.y, this.width, this.height, 5);
+    fill(0, 0, 0);
+    textSize(19);
+    textAlign(LEFT, TOP);
+    text(this.label, this.x+10, this.y+this.height/4);
+};
+var btn3 = new Button({
+    x: 155,
+    y: 171,
+    label: "   Start"
+});
+var btn4 = new Button({
+    x:0,
+    y:0,
+    label:"h",
+});
+function mouseClicked() {
+     if (
+        mouseX >= btn3.x &&
+        mouseX <= btn3.x + btn3.width &&
+        mouseY >= btn3.y &&
+        mouseY <= btn3.y + btn3.height) {
+        }     
+    }
+draw = function() {
+    btn3.draw();
+};
