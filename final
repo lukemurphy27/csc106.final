@@ -1,0 +1,12 @@
+background(153, 147, 147);
+textSize(25);
+text("Slots Casino Game", 95, 100);
+text("Luke Murphy & David Arias", 51, 140);
+var drawButton = function() {
+    fill(38, 31, 166);
+    rect(162, 160, 80, 25);
+    fill(255, 255, 255);
+    textSize(16);
+    text("Start", 184, 179);
+};
+drawButton();
