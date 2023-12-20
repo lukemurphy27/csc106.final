@@ -1,0 +1,210 @@
+var currentScreen = "splash";
+var score = 0;
+var spin = false;  
+var duration = 30; 
+var stop;
+
+var Button = function (config) {
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 100;
+    this.height = config.height || 50; 
+    this.label = config.label || "Click";
+};
+
+Button.prototype.draw = function () {
+    fill(255, 255, 255);
+    rect(this.x, this.y, this.width, this.height, 5);
+    fill(0, 0, 0);
+    textSize(19);
+    textAlign(LEFT, TOP);
+    text(this.label, this.x + 10, this.y + this.height / 4);
+};
+
+var btn1 = new Button({
+    x: 275,
+    y: 325,
+    height: 50, 
+    label: "   Spin",
+});
+
+var btn2 = new Button({
+    x: 155,
+    y: 190,
+    height: 50,
+    label: "   Start",
+});
+
+var btn3 = new Button({
+    x: 25,
+    y: 325,
+    height: 50,
+    label: "   Back",
+});
+
+var symbols = [
+    getImage("cute/Key"),
+    getImage("space/7"),
+    getImage("cute/GemBlue"),
+    getImage("cute/GemGreen"),
+    getImage("cute/GemOrange"),
+    getImage("cute/ChestClosed"),
+    getImage("creatures/OhNoes-Happy")
+];
+
+var randomImg = []; 
+var counter = 0;  
+
+function mouseClicked() {
+    if (currentScreen === "splash") {
+        if (
+            mouseX >= btn2.x &&
+            mouseX <= btn2.x + btn2.width &&
+            mouseY >= btn2.y &&
+            mouseY <= btn2.y + btn2.height
+        ) {
+            currentScreen = "game";
+        }
+    } else if (currentScreen === "game") {
+        if (
+            mouseX >= btn1.x &&
+            mouseX <= btn1.x + btn1.width &&
+            mouseY >= btn1.y &&
+            mouseY <= btn1.y + btn1.height
+        ) {
+            randomImg = [];
+            stop = frameCount + duration + floor(random(30, 60));
+            spin = true;  
+            counter = 0;  
+        }
+
+        if (
+            mouseX >= btn3.x &&
+            mouseX <= btn3.x + btn3.width &&
+            mouseY >= btn3.y &&
+            mouseY <= btn3.y + btn3.height
+        ) {
+            currentScreen = "splash";
+        }
+    }
+}
+function updateScore() {
+    if (randomImg.length === 3) {
+        for (var i = 0; i < 3; i++) {
+            if (randomImg[i] === symbols[0]) {
+                score += 10;
+            } else if (randomImg[i] === symbols[1]) {
+                score += 100;
+            } else if (randomImg[i] === symbols[2]) {
+                score += 40;
+            } else if (randomImg[i] === symbols[3]) {
+                score += 30;
+            } else if (randomImg[i] === symbols[4]) {
+                score += 20;
+            } else if (randomImg[i] === symbols[5]) {
+                score += 25;
+            } else if (randomImg[i] === symbols[6]) {
+                score += 15;
+            }
+        }
+    }
+}
+
+function showScore() {
+    fill(0, 0, 0);
+    textSize(17);
+    text("Score:", 152, 74);
+    text(score, 206, 74);
+}
+var x = 4;
+var y = 182;
+var h = 6;
+
+var drawBitmoji = function(x,y,h) {
+    var drawhead = function() {
+    noStroke();
+    fill(255,205,148);
+    rect(x+(h/10*185), y+(h/10*230), h/10*30, h/10*30); //neck
+    ellipse(x+(h/10*200),y+(h/10*200),h/10*83,h/10*100); //head
+    fill(255, 255, 255);
+    fill(153, 69, 20);
+    ellipse(x+(h/10*185),y+(h/10*189),h/10*10,h/10*10); //left eye
+    ellipse(x+(h/10*215),y+(h/10*189),h/10*10,h/10*10); //right eye
+    fill(255, 255, 255);
+    arc(x+(h/10*200), y+(h/10*220), h/10*34, h/10*8, -22, 235); //mouth
+    };
+    var drawbody = function(){
+    fill (10, 133, 10);
+    rect(x+(h/10*160), y+(h/10*260), h/10*80, h/10*150, h/10*20); //body
+    fill(0, 0, 0);
+    textSize(h/10*18);
+    text("LM", x+(h/10*205), y+(h/10*290));
+    fill(153, 93, 34);
+    quad(x+(h/10*152),y+(h/10*203),x+(h/10*192),y+(h/10*150),x+(h/10*166),y+(h/10*156),x+(h/10    *142),y+(h/10*180)); //left hair
+    quad(x+(h/10*261),y+(h/10*184),x+(h/10*235),y+(h/10*158),x+(h/10*210),y+(h/10*151),x+(h/10    *249),y+(h/10*206)); //right hair
+    fill(168, 165, 165);
+    arc(x+(h/10*200),y+(h/10*170),h/10*80,h/10*55,180,360); //hat
+    fill (10, 133, 10);
+    rect(x+(h/10*145), y+(h/10*264), h/10*20, h/10*100, h/10*20); //arm
+    rect(x+(h/10*237), y+(h/10*263), h/10*20, h/10*100, h/10*20); //arm
+    fill(255, 205, 143);
+    };
+    drawhead();
+    drawbody();
+
+};
+
+
+function draw() {
+    if (currentScreen === "splash") {
+        background(153, 147, 147);
+        textSize(25);
+        text("Slots Casino Game", 95, 100);
+        text("Luke Murphy & David Arias", 51, 140);
+        btn2.draw();
+        drawBitmoji(x,y,h);
+    } else if (currentScreen === "game") {
+        background(255, 0, 0);
+        stroke(0, 0, 0);
+        fill(0, 0, 0);
+        textSize(30);
+        textAlign(CENTER, TOP);
+        text("SLOTS", 200, 35);
+        fill(255, 255, 255);
+        rect(140, 71, 120, 25);
+        fill(255, 255, 255);
+        ellipse(200, 200, 10000, 200);
+        line(0, 100, 1, 300);
+        line(399, 100, 399, 300);
+        line(133.333, 100, 133.333, 300);
+        line(266.666, 100, 266.666, 300);
+        stroke(255, 0, 0);
+        line(0, 200, 400, 200);
+        btn1.draw();
+        btn3.draw();
+        
+       if (spin) {
+            counter++;
+
+            if (counter <= duration) {
+                
+                for (var i = 0; i < 3; i++) {
+                    var randomIndex = floor(random(symbols.length));
+                    randomImg[i] = symbols[randomIndex];
+                    image(randomImg[i], 25 + 10 + i * 136, 160, 70, 70);
+                }
+            } else if (frameCount >= stop) {
+                spin = false;
+                updateScore();
+                
+            }
+        } else {
+            
+            for (var i = 0; i < 3; i++) {
+                image(randomImg[i], 25 + 10 + i * 136, 160, 70, 70);
+            }
+              showScore();
+        }
+    }
+}
+
