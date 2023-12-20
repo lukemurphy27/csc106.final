@@ -1,0 +1,214 @@
+//Sometimes the machine won't spin due to issues with khan. If this problem arises from the if (loop) statement in the draw function down to the bottom of the page needs to be copied, deleted for the machine to work properly.
+
+var currentScreen = "splash"; //Sets the current screen to the splash screen
+var score = 0; //defines the score and sets it to zero
+var spin = false;  //determines if the bitmojis are spinning or not
+var duration = 120;  //duration of the spin
+var stop; //defines the stop var
+
+var Button = function (config) { //khan button class
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 100;
+    this.height = config.height || 50; 
+    this.label = config.label || "Click";
+};
+
+Button.prototype.draw = function () { //khan button class
+    fill(255, 255, 255);
+    rect(this.x, this.y, this.width, this.height, 5);
+    fill(0, 0, 0);
+    textSize(19);
+    textAlign(LEFT, TOP);
+    text(this.label, this.x + 10, this.y + this.height / 4);
+};
+
+var btn1 = new Button({ //object for the spin button
+    x: 275,
+    y: 325,
+    height: 50, 
+    label: "   Spin",
+});
+
+var btn2 = new Button({//object for the start button on splash screen
+    x: 155,
+    y: 190,
+    height: 50,
+    label: "   Start",
+});
+
+var btn3 = new Button({//object for the back button
+    x: 25,
+    y: 325,
+    height: 50,
+    label: "   Back",
+});
+
+var symbols = [   //array for the different images used in the slot machine
+    getImage("cute/Key"),
+    getImage("space/7"),
+    getImage("cute/GemBlue"),
+    getImage("cute/GemGreen"),
+    getImage("cute/GemOrange"),
+    getImage("cute/ChestClosed"),
+    getImage("creatures/OhNoes-Happy")
+];
+
+var randomImg = []; //var for the random image that is selected from the array
+var counter = 0;  //defines the counter for the duration of each spin and sets it to zero
+
+function mouseClicked() {   //mouse clicked function that stems from the khan button class and defines what each button does
+    if (currentScreen === "splash") { 
+        if (
+            mouseX >= btn2.x &&
+            mouseX <= btn2.x + btn2.width &&
+            mouseY >= btn2.y &&
+            mouseY <= btn2.y + btn2.height
+        ) {
+            currentScreen = "game"; //sets the current screen to the game screen when button is clicked
+        }
+    } else if (currentScreen === "game") {
+        if (
+            mouseX >= btn1.x &&
+            mouseX <= btn1.x + btn1.width &&
+            mouseY >= btn1.y &&
+            mouseY <= btn1.y + btn1.height
+        ) {
+            randomImg = []; //removes the images from the last spin
+            stop = frameCount + duration; //calucates when the spin should stop based off the current frame count and the duration of the spin
+            spin = true;  //tells the slots that they should be spinning
+            counter = 0;  //resets the counter to 0 for every new spin
+        }
+
+        if (
+            mouseX >= btn3.x &&
+            mouseX <= btn3.x + btn3.width &&
+            mouseY >= btn3.y &&
+            mouseY <= btn3.y + btn3.height
+        ) {
+            currentScreen = "splash"; //sets screen to back to the splash screen
+        }
+    }
+}
+function updateScore() { //function for updating the score
+    if (randomImg.length === 3) { //allows the score to update only if 3 random images have been selected
+        score = 0; //resets score to zero after every spin
+        for (var i = 0; i < 3; i++) { //repeats the scoring process three times for every selected image
+            if (randomImg[i] === symbols[0]) { //conditionals for each image in the symbols array and adds to the score if that images is the random image selected
+                score += 10;
+            } else if (randomImg[i] === symbols[1]) {
+                score += 100;
+            } else if (randomImg[i] === symbols[2]) {
+                score += 40;
+            } else if (randomImg[i] === symbols[3]) {
+                score += 30;
+            } else if (randomImg[i] === symbols[4]) {
+                score += 20;
+            } else if (randomImg[i] === symbols[5]) {
+                score += 25;
+            } else if (randomImg[i] === symbols[6]) {
+                score += 15;
+            }
+        }
+    }
+}
+
+function drawScore() { //draws the score and the score text
+    fill(0, 0, 0);
+    textSize(17);
+    text("Score:", 152, 74);
+    text(score, 206, 74);
+}
+var x1 = 4; //bitmoji vars
+var y1 = 182;
+var h1 = 6;
+
+var drawBitmoji1 = function(x1, y1, h1) { //bitmoji
+    var drawhead1 = function() {
+        noStroke();
+        fill(255,205,148);
+        rect(x1+(h1/10*185), y1+(h1/10*230), h1/10*30, h1/10*30); //neck
+        ellipse(x1+(h1/10*200),y1+(h1/10*200),h1/10*83,h1/10*100); //head
+        fill(255, 255, 255);
+        fill(153, 69, 20);
+        ellipse(x1+(h1/10*185),y1+(h1/10*189),h1/10*10,h1/10*10); //left eye
+        ellipse(x1+(h1/10*215),y1+(h1/10*189),h1/10*10,h1/10*10); //right eye
+        fill(255, 255, 255);
+        arc(x1+(h1/10*200), y1+(h1/10*220), h1/10*34, h1/10*8, -22, 235); //mouth
+    };
+    
+    var drawbody1 = function(){
+        fill (10, 133, 10);
+        rect(x1+(h1/10*160), y1+(h1/10*260), h1/10*80, h1/10*150, h1/10*20); //body
+        fill(0, 0, 0);
+        textSize(h1/10*18);
+        text("LM", x1+(h1/10*205), y1+(h1/10*290));
+        fill(153, 93, 34);
+        quad(x1+(h1/10*152),y1+(h1/10*203),x1+(h1/10*192),y1+(h1/10*150),x1+(h1/10*166),y1+(h1/10*156),x1+(h1/10*142),y1+(h1/10*180)); //left hair
+        quad(x1+(h1/10*261),y1+(h1/10*184),x1+(h1/10*235),y1+(h1/10*158),x1+(h1/10*210),y1+(h1/10*151),x1+(h1/10*249),y1+(h1/10*206)); //right hair
+        fill(168, 165, 165);
+        arc(x1+(h1/10*200),y1+(h1/10*170),h1/10*80,h1/10*55,180,360); //hat
+        fill (10, 133, 10);
+        rect(x1+(h1/10*145), y1+(h1/10*264), h1/10*20, h1/10*100, h1/10*20); //arm
+        rect(x1+(h1/10*237), y1+(h1/10*263), h1/10*20, h1/10*100, h1/10*20); //arm
+        fill(255, 205, 143);
+    };
+
+    drawhead1();
+    drawbody1();
+};
+
+function draw() { 
+    if (currentScreen === "splash") { //if statement that draws the right screen based on what the current screen is
+        background(153, 147, 147);
+        textSize(25);
+        fill(0,0,0);
+        text("Slots Casino Game", 95, 100);
+        text("Luke Murphy & David Arias", 51, 140);
+        btn2.draw(); //draws btn2
+        drawBitmoji1(x1,y1,h1); //calls bitmoji function
+    } else if (currentScreen === "game") {//if statement that draws the right screen based on what the current screen is
+        background(255, 0, 0); //draws the slot machine design
+        stroke(0, 0, 0);
+        fill(0, 0, 0);
+        textSize(30);
+        textAlign(CENTER, TOP);
+        text("SLOTS", 200, 35);
+        fill(255, 255, 255);
+        rect(140, 71, 120, 25);
+        fill(255, 255, 255);
+        ellipse(200, 200, 10000, 200);
+        line(0, 100, 1, 300);
+        line(399, 100, 399, 300);
+        line(133.333, 100, 133.333, 300);
+        line(266.666, 100, 266.666, 300);
+        stroke(255, 0, 0);
+        line(0, 200, 400, 200);
+        btn1.draw(); //calls button1
+        btn3.draw(); //calls button2
+        
+       if (spin) { //checks if should be spinning
+            counter++; //adds to the counter for every cycle of the spin until the duration is met
+
+            if (counter <= duration) { //if the slots are spinning
+                
+                for (var i = 0; i < 3; i++) { //loops three times to draw the three images
+                    var randomIndex = floor(random(symbols.length)); 
+                    randomImg[i] = symbols[randomIndex]; //selects the random symbols for the spin
+                    image(randomImg[i], 25 + 10 + i * 136, 160, 70, 70); //draws the selected random images for the spinning process
+                }
+            } else if (frameCount >= stop) { //if the spin duration is over 
+                spin = false; //stops the spin
+                updateScore(); //calls the update score function
+                
+            }
+        } else {
+            
+            for (var i = 0; i < 3; i++) { //if the game is not spinning draws the selected random images
+                image(randomImg[i], 25 + 10 + i * 136, 160, 70, 70);
+            }
+              drawScore(); //calls the draw score function to record the spins score
+        }
+    }
+}
+
